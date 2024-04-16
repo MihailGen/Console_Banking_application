@@ -16,17 +16,11 @@ def trans_filtering_logics(trans, filter_trans):
 def account_creation():
     name = input("Enter your name: ")
     surname = input("Enter your surname: ")
-    flag = True
-    try:
-        year_of_birth = int(input("Enter your year of birth: "))
-    except ValueError:
-        print("Please enter a number\nThe new client is`nt created\nPlease try again\n")
-        flag = False
-    if flag:
-        password = input("Enter your password: ")
-        clientfout(name, surname, year_of_birth, password, 1_000, 0)  # 1000 - beginning limit.
+    year_of_birth = int(input("Enter your year of birth: "))
+    password = input("Enter your password: ")
+    clientfout(name, surname, year_of_birth, password, 1_000, 0)  # 1000 - beginning limit.
     # 0 - beginning money balance
-        print("Congratulation!!!\nYou have successfully created new account\n ")
+    print("Congratulation!!!\nYou have successfully created new account\n ")
 
 
 # Money addition
@@ -172,11 +166,7 @@ while True:
     print("8. Statistic of expected transactions")
     print("9. Filtering of expected transactions")
     print("10. Exit\n")
-    try:
-        choice = int(input("Enter your choice: "))
-    except ValueError:
-        print("You mast enter valid number from 1 to 10\nPlease try again\n")
-        flag = False
+    choice = int(input("Enter your choice: "))
 
     # Bank account creation
     if choice == 1:
@@ -184,13 +174,7 @@ while True:
 
         # Money addition
     elif choice == 2:
-        flag = True
-        try:
             bill = int(input("How much money do you want to deposit into your account: "))
-        except ValueError:
-            print("You mast enter valid number")
-            flag = False
-        if flag:
             money = monyadd(client_from_file()[5], bill, client_from_file()[4])
             clientfout(client_from_file()[0], client_from_file()[1], client_from_file()[2], client_from_file()[3],
                    client_from_file()[4], money)
@@ -198,13 +182,8 @@ while True:
     # Money withdraw
     elif choice == 3:
         if pass_check(input("Enter your password: "), client_from_file()[3]):
-            flag = True
-            try:
                 withdraw_bill = int(input("How much money do you want to withdraw from your account: "))
-            except ValueError:
                 print("Please enter a number")
-                flag = False
-            if flag:
                 clientfout(client_from_file()[0], client_from_file()[1], client_from_file()[2], client_from_file()[3],
                            client_from_file()[4], monywithdr(client_from_file()[5], withdraw_bill))
 
@@ -215,13 +194,7 @@ while True:
 
     # Expected transactions
     elif choice == 5:
-        flag = True
-        try:
             transaction_money = int(input("How much money do you want to get: "))
-        except ValueError:
-            print("Please enter a number")
-            flag = False
-        if flag:
             transaction_comment = input("Comments for this transaction: ")
             current_date = datetime.datetime.now()
             current_date.strftime('%m/%d/%y %H:%M:%S')
@@ -233,13 +206,8 @@ while True:
 
     # Account limit setting
     elif choice == 6:
-        flag = True
-        try:
             account_limit = int(input("Enter maximum balance of money,\nthat can be stored in your account?: "))
-        except ValueError:
             print("Please enter a number")
-            flag = False
-        if flag:
             clientfout(client_from_file()[0], client_from_file()[1], client_from_file()[2], client_from_file()[3],
                    account_limit, client_from_file()[5])
             print ("Your maximum balance of money is " + str(account_limit) + "!\n")
@@ -264,11 +232,8 @@ while True:
 
     # Filtering of expected transactions
     elif choice == 9:
-        try:
-            transfiltr = int(input("Please, enter a lower filter\n"
+        transfiltr = int(input("Please, enter a lower filter\n"
                                        "for transactions summ: "))
-        except ValueError:
-            print("Please enter a valid number")
         trans_filtering_logics(transactions, transfiltr)
 
 
@@ -279,5 +244,4 @@ while True:
 
     # Other operation numbers
     else:
-        if flag:
             print("Wrong operation number, please try again!" + "\n")
