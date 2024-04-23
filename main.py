@@ -1,9 +1,13 @@
+# Это восстановленный файл
 import datetime
+
 
 # Creating path for transactions filterng
 def trans_filtering(trans):
     for comment, amount in trans.items():
         yield comment, amount
+    return True
+
 
 # Realize logics for transactions filtering
 # Work with path, created in "trans_filtering" function
@@ -11,52 +15,75 @@ def trans_filtering_logics(trans, filter_trans):
     for comment, amount in trans_filtering(trans):
         if amount >= filter_trans:
             print(comment + ": " + str(amount) + " rubl")
+    return True
+
 
 # new client creation procedure
 def account_creation():
-    name = input("Enter your name: ")
-    surname = input("Enter your surname: ")
-    year_of_birth = int(input("Enter your year of birth: "))
-    password = input("Enter your password: ")
-    clientfout(name, surname, year_of_birth, password, 1_000, 0)  # 1000 - beginning limit.
-    # 0 - beginning money balance
-    print("Congratulation!!!\nYou have successfully created new account\n ")
+    flag = True
+    name = ""
+    surname = ""
+    year_of_birth = 0
+    password = ""
+    if __name__ == "__main__":
+        name = input("Enter your name: ")
+        surname = input("Enter your surname: ")
+    else:
+        name = "Test"
+        surname = "Test"
+    try:
+        if __name__ == "__main__":
+            year_of_birth = int(input("Enter your year of birth: "))
+        else:
+            year_of_birth = 0
+    except ValueError:
+        print("Please enter a number\nThe new client is`nt created\nPlease try again\n")
+        flag = False
+        return flag
+    if flag:
+        if __name__ == "__main__":
+            password = input("Enter your password: ")
+        else:
+            password = "Test"
+        clientfout(name, surname, year_of_birth, password, 1_000, 0)  # 1000 - beginning limit.
+        # 0 - beginning money balance
+        print("Congratulation!!!\nYou have successfully created new account\n ")
+    return flag
 
 
 # Money addition
-def monyadd(money_func, bill_func, account_limit):
-    if (money_func + bill_func) > account_limit:
+def monyadd(money_func, bill_func, acc_limit):
+    if (money_func + bill_func) > acc_limit:
         print("The limit on your account has been exceeded!\nOperation canceled")
     else:
         money_func += bill_func
         print("Account has been successfully added!\n")
-        return money_func
+    return money_func
 
 
 # Money withdraw function
-def monywithdr(money, withdraw_bill):
-    print("Your current balance is: " + str(money))
-
-    if (money - withdraw_bill) < 0:
+def mony_withdr(money_witdrw, bill_withdr):
+    print("Your current balance is: " + str(money_witdrw))
+    if (money_witdrw - bill_withdr) < 0:
         print("You do not have enough money\nto complete this operation")
     else:
-        money -= withdraw_bill
+        money_witdrw -= bill_withdr
         print("Withdrawal completed successfully")
-        print("Your current balance is: " + str(money) + "\n")
-        return money
+        print("Your current balance is: " + str(money_witdrw) + "\n")
+    return money_witdrw
 
 
 # Apply transactions
-def apply_trans(money, limit_account):
-    for comment, amount in transactions.items():
+def apply_trans(money, limit_account, transactions_func):
+    for comment, amount in transactions_func.items():
         if (money + int(amount)) > limit_account:
-                print("Transaction: " + comment + "\ncannot be applied (limit exceeded)\n")
+            print("Transaction: " + comment + "\ncannot be applied (limit exceeded)\n")
         else:
-            if int(transactions[comment]) > 0:
+            if int(transactions_func[comment]) > 0:
                 money += int(amount)
                 print("Transaction: " + comment + "\nsuccessfully applied\n")
-                transactions[comment] = 0
-    transactionfout(transactions)
+                transactions_func[comment] = 0
+    transactionfout(transactions)  # Commented for Test only
     return money
 
 
@@ -74,8 +101,8 @@ def clientfout(name_to_file, surname_to_file, year_of_birth_to_file, password_to
 
 
 # Password checking
-def pass_check(pswd_tmp, password_fail):
-    if password_fail != pswd_tmp or not password_fail:
+def pass_check(passwd_tmp, password_fail):
+    if password_fail != passwd_tmp or not password_fail:
         print("Wrong password!")
         return False
     else:
@@ -136,7 +163,6 @@ def transactionfout(trans):
                 tranfout.write(str(amount2) + '\n')
 
 
-
 # Starting cycle of progamms
 print("\n******************************************")
 print("Welcome to the console banking application")
@@ -144,7 +170,9 @@ print("Version 3.0")
 print("******************************************\n")
 
 print("Hi! Friend!\nRestore data from file?")
-choice = input("Y / N: ")
+choice = "N"
+if __name__ == "__main__":
+    choice = input("Y / N: ")
 if choice == "Y" or choice == "y":
     count = 0
     client_restored = client_from_file()
@@ -166,7 +194,8 @@ while True:
     print("8. Statistic of expected transactions")
     print("9. Filtering of expected transactions")
     print("10. Exit\n")
-    choice = int(input("Enter your choice: "))
+    if __name__ == "__main__":
+        choice = int(input("Enter your choice: "))
 
     # Bank account creation
     if choice == 1:
@@ -174,54 +203,65 @@ while True:
 
         # Money addition
     elif choice == 2:
+        try:
+            # if __name__ == "__main__":
             bill = int(input("How much money do you want to deposit into your account: "))
-            money = monyadd(client_from_file()[5], bill, client_from_file()[4])
-            clientfout(client_from_file()[0], client_from_file()[1], client_from_file()[2], client_from_file()[3],
+        except ValueError:
+            print("Please enter a number")
+        money = monyadd(client_from_file()[5], bill, client_from_file()[4])
+        clientfout(client_from_file()[0], client_from_file()[1], client_from_file()[2], client_from_file()[3],
                    client_from_file()[4], money)
 
     # Money withdraw
     elif choice == 3:
         if pass_check(input("Enter your password: "), client_from_file()[3]):
+            try:
+                # if __name__ == "__main__":
                 withdraw_bill = int(input("How much money do you want to withdraw from your account: "))
+            except ValueError:
                 print("Please enter a number")
-                clientfout(client_from_file()[0], client_from_file()[1], client_from_file()[2], client_from_file()[3],
-                           client_from_file()[4], monywithdr(client_from_file()[5], withdraw_bill))
+
+        clientfout(client_from_file()[0], client_from_file()[1], client_from_file()[2], client_from_file()[3],
+                   client_from_file()[4], mony_withdr(client_from_file()[5], withdraw_bill))
 
     # Display balance
     elif choice == 4:
+        # if __name__ == "__main__":
         if pass_check(input("Enter your password: "), client_restored[3]):
             print("Your current balance is: " + str(client_from_file()[5]) + "\n")
 
     # Expected transactions
     elif choice == 5:
-            transaction_money = int(input("How much money do you want to get: "))
-            transaction_comment = input("Comments for this transaction: ")
-            current_date = datetime.datetime.now()
-            current_date.strftime('%m/%d/%y %H:%M:%S')
-            transactions[transaction_comment + " (" + current_date.strftime('%m/%d/%y %H:%M:%S') + ")"] \
+        # if __name__ == "__main__":
+        transaction_money = int(input("How much money do you want to get: "))
+        transaction_comment = input("Comments for this transaction: ")
+        current_date = datetime.datetime.now()
+        current_date.strftime('%m/%d/%y %H:%M:%S')
+        transactions[transaction_comment + " (" + current_date.strftime('%m/%d/%y %H:%M:%S') + ")"] \
             = transaction_money
-            print("\nYour expected transactions is successfully added!\nin transaction list")
-            print("You have a " + str(len(transactions)) + " transactions\n")
-            transactionfout(transactions)
+        print("\nYour expected transactions is successfully added!\nin transaction list")
+        print("You have a " + str(len(transactions)) + " transactions\n")
+        transactionfout(transactions)
 
     # Account limit setting
     elif choice == 6:
-            account_limit = int(input("Enter maximum balance of money,\nthat can be stored in your account?: "))
-            print("Please enter a number")
-            clientfout(client_from_file()[0], client_from_file()[1], client_from_file()[2], client_from_file()[3],
+        # if __name__ == "__main__":
+        account_limit = int(input("Enter maximum balance of money,\nthat can be stored in your account?: "))
+        print("Please enter a number")
+        clientfout(client_from_file()[0], client_from_file()[1], client_from_file()[2], client_from_file()[3],
                    account_limit, client_from_file()[5])
-            print ("Your maximum balance of money is " + str(account_limit) + "!\n")
+        print("Your maximum balance of money is " + str(account_limit) + "!\n")
 
     # Apply transactions
     elif choice == 7:
         clientfout(client_from_file()[0], client_from_file()[1], client_from_file()[2], client_from_file()[3],
-                   client_from_file()[4], apply_trans(client_from_file()[5], client_from_file()[4]))
+                   client_from_file()[4], apply_trans(client_from_file()[5], client_from_file()[4], transactions))
 
     # Statistics on expected transactions
     elif choice == 8:
         amounts = {}
         for comment, amount in transactions.items():
-            if amount not in amounts and amount > 0 :
+            if amount not in amounts and amount > 0:
                 amounts[amount] = 1
             elif amount > 0:
                 amounts[amount] += 1
@@ -232,8 +272,12 @@ while True:
 
     # Filtering of expected transactions
     elif choice == 9:
-        transfiltr = int(input("Please, enter a lower filter\n"
-                                       "for transactions summ: "))
+        try:
+            # if __name__ == "__main__":
+            transfiltr = int(input("Please, enter a lower filter\n"
+                                   "for transactions summ: "))
+        except ValueError:
+            print("Please enter a number")
         trans_filtering_logics(transactions, transfiltr)
 
 
@@ -244,4 +288,5 @@ while True:
 
     # Other operation numbers
     else:
-            print("Wrong operation number, please try again!" + "\n")
+        print("Wrong operation number, please try again!" + "\n")
+       # break  # эта строчка чисто для теста, чтобы не циклился
